@@ -15,8 +15,8 @@
                 <RowDefinition Height="30*"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="70*"/>
-                <ColumnDefinition Width="30*"/>
+                <ColumnDefinition Width="20*"/>
+                <ColumnDefinition Width="80*"/>
             </Grid.ColumnDefinitions>
             <Grid x:Name="gridConnect" Margin="5">
                 <StackPanel>

@@ -131,8 +131,7 @@ namespace WpfHueEntDemo
         }
 
         private void ViewBridges()
-        {
-            Action<object, EventArgs, BridgeClass, List<TextBox>> actionEdit = (sender, e, _b, _tbs) =>
+        {Action<object, EventArgs, BridgeClass, List<TextBox>> actionEdit = (sender, e, _b, _tbs) =>
             {
                 int index = bridgeClasses.FindIndex(x => x.IP == _b.IP);
                 var _ip = _tbs[1].Text;
@@ -164,6 +163,10 @@ namespace WpfHueEntDemo
             };
 
             spBridgeList.Children.Clear();
+            
+            if (bridgeClasses == null || bridgeClasses.Count <= 0)
+                return;
+
             StackPanel _spB = new();
             _spB.Margin = new Thickness(0, 0, 0, 10);
             bridgeClasses.ForEach(b =>

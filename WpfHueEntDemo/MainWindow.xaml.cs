@@ -152,49 +152,25 @@ namespace WpfHueEntDemo
             Bridges = ConnectBridgeWindow.GetBridgesInfo();
         }
 
-        
-        static int[] targetIDs = { 2, 3, 5, 6, 7, 8, 9, 10, 11 };
-        public struct Keys
+        private async Task Start(string ip, string key, string enKey)
         {
-            public string ip;
-            public string appKey;
-            public string Enkey;
-            public string name;
-            public Keys(string argip, string argappKey, string argEnkey, string argname)
-            {
-                ip = argip; appKey = argappKey; Enkey = argEnkey; name = argname;
-            }
+
+            StreamingGroup stream = await StreamingSetup.CreateStreamingSetupAsync(ip, key, enKey);
+            entLayers.Add(stream.GetNewLayer(isBaseLayer: true));
+            preHex = "#222222";
         }
 
-
-        //private async void btConnect_Click(object sender, RoutedEventArgs e)
-        //{
-        //    //string ip = "192.168.11.4";
-        //    string ip = "192.168.0.8";
-        //    string appName = "myhueapp";
-        //    string devName = "myhuedevice";
-        //    ILocalHueClient hueClient = new LocalHueClient(ip);
-        //    MessageBox.Show("Press your bridge button!");
-        //    var appKey = await hueClient.RegisterAsync(appName, devName, true);
-        //    tbKey.Text = appKey.Username;//kiQ7gdQkNy9CaF0g9SPtfEAEemjz926oAsH22pq-
-        //    tbEnKey.Text = appKey.StreamingClientKey;//8D89E773F483D8FE26B08E5E402E3116
-        //}
-
-        //private Keys b1, b2, b3;
-        private async void btRun_Click(object sender, RoutedEventArgs e)
+        private void btRun_Click(object sender, RoutedEventArgs e)
         {
+            Bridges = ConnectBridgeWindow.GetBridgesInfo();
             if (Bridges == null || Bridges.Count <= 0)
                 return;
-            ////b1 = new Keys("192.168.11.3", "kiQ7gdQkNy9CaF0g9SPtfEAEemjz926oAsH22pq-", "8D89E773F483D8FE26B08E5E402E3116", "Bridge1");
-            //b1 = new Keys("192.168.0.8", "1qprndliXpJrcFqPRdwuChsIZoGC62xhhhxkPbQ5", "DA7675A344AAE7948C304F0A4619016A", "Bridge1");
-            //b2 = new Keys("192.168.11.2", "mLjkZSMLrgYj4-oHuACDiJH7tbDI4bwYCUsINHWr", "4C0AA4782B980F658E60782D733E5EC4", "Bridge2");
-            //b3 = new Keys("192.168.11.4", "ucxbc14f2OrgdZhpMg93TrO0mw0T3OowjqdWdcvF", "B6C30C02D994717CF30F2C3513CDCB1F", "Bridge3");
-
+        
+            Bridges.ForEach(async bridge =>
+            {
+                await Start(bridge.IP, bridge.APP_KEY, bridge.EN_KEY);
+            });
             InitializeLimit();
-
-            //await Start(b1.ip, b1.appKey, b1.Enkey);
-            //await Start(b2.ip, b2.appKey, b2.Enkey);
-            //await Start(b3.ip, b3.appKey, b3.Enkey);
             InitializeTimer();
         }
 
@@ -216,12 +192,7 @@ namespace WpfHueEntDemo
         {
             Manage_Process_OSC();
         }
-        private async Task Start(string ip, string key, string enKey)
-        {
-            StreamingGroup stream = await StreamingSetup.CreateStreamingSetupAsync(ip, key, enKey);
-            entLayers.Add(stream.GetNewLayer(isBaseLayer: true));
-            preHex = "#222222";
-        }
+        
 
         private static CancellationTokenSource WaitAndNext(CancellationTokenSource cts, int waitTime)
         {
@@ -735,6 +706,7 @@ namespace WpfHueEntDemo
 
         private void btnReset_Click(object sender, RoutedEventArgs e)
         {
+            int[] targetIDs = { 2, 3, 5, 6, 7, 8, 9, 10, 11 };
             sw.Reset();
             swKame.Reset();
             swHame.Reset();

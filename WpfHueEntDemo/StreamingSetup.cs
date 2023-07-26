@@ -20,13 +20,14 @@ namespace WpfHueEntDemo
             string ekey = argEkey;
 
             StreamingHueClient client = new StreamingHueClient(ip, key, ekey);
-            var all = await client.LocalHueClient.GetEntertainmentGroups ();
-            var group = all.FirstOrDefault ();
-
+            var all = await client.LocalHueClient.GetEntertainmentGroups();
+            var group = all.FirstOrDefault();
+            
             var stream = new StreamingGroup(group.Locations);
             await client.Connect(group.Id);
-            client.AutoUpdate(stream, new CancellationToken(), 50);
-            Debug.Print("EntertainmentArea's Name: "+group.Name + ", Connected.");
+            await client.AutoUpdate(stream, new CancellationToken(), 50);
+
+            Debug.Print("EntertainmentArea's Name: " + group.Name + ", Connected.");
             return stream;
         }
     }
